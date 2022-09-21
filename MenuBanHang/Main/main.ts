@@ -1,125 +1,109 @@
-import { khackHang } from "../model/khackHang";
-import { sanPham } from "../model/sanPham";
+import { OrderDetailManage } from "./../service/orderDetailManage";
+import { OrderDetail } from "./../model/orderDetail";
+import { CustomerManage } from "./../service/customerManage";
+import { Customer } from "./../model/customer";
+import { ProductManage } from "./../service/productManage";
+import { Product } from "./../model/product";
 
-function menu() {
-  let menu = `
-    1. San pham
-    2. Khach hang`;
-  console.log(menu);
-}
-
-
+let listProduct: ProductManage = new ProductManage();
+let listCustomer: CustomerManage = new CustomerManage();
+let orderDetail: OrderDetailManage = new OrderDetailManage();
 let input = require("readline-sync");
-let listSanPham: sanPham = new sanPham();
-let listKhachHang: khackHang = new khackHang();
 
-function menuSanPham() {
-    let menuSanPham = `
-      1. Them san Pham
-      2. Sua san pham
-      3. Xoa san pham
-      4. Hien thi san pham`;
-    console.log(menuSanPham);
+function mainMenu() {
+  let menu = `---------Menu-------
+              1. them sua xoa san pham
+              2. them khack hang
+              3. mua san pham
+              4. hien hoa don`;
+  let choice;
+  do {
+    console.log(menu);
+    let choice = +input.question(" nhap lua chon");
+    switch (choice) {
+      case 1:
+        menuProduct();
+        break;
+      case 2:
+        addCustomer();
+        menuProduct();
+        break;
+      case 4:
+        showOrder();
+        break;
+    }
+  } while (choice != 0);
+}
+function menuProduct() {
+  let menu = `
+                  1. them san pham  
+                  2. sua san pham
+                  3. xoa san pham
+                  4. hien thi san pham`;
+  console.log(menu);
+  let choice;
+  do {
+    choice = +input.question("nhap lua chon  ");
+
+    switch (choice) {
+      case 1:
+        addProduct();
+        menuProduct();
+        break;
+      case 2:
+        editProduct();
+        menuProduct();
+        break;
+      case 3:
+        removeProduct();
+        menuProduct();
+        break;
+      case 4:
+        showProduct();
+        menuProduct();
+        break;
+    }
+  } while (choice != 0);
+}
+function addProduct() {
+  let id = +input.question("nhap ID");
+  let name = input.question("nhap ten san pham");
+  let quantity = +input.question("nhap so luong san pham");
+  let product: Product = new Product(id, name, quantity);
+  listProduct.add(product);
+}
+function addCustomer() {
+  let id = +input.question("nhap Id : ");
+  let name = input.question("nhap ten khack hang : ");
+  let customer: Customer = new Customer(id, name);
+  listCustomer.add(customer);
+}
+function editProduct() {
+  let id = +input.question("nhap Id san pham can sua  :");
+  listProduct.update(id);
+}
+
+function removeProduct() {
+  let id = +input.question("nhap Id can xoa :  ");
+  listProduct.remove(id);
+}
+function buyProduct(){
+  let id = +input.question('nhap id khach hang')
+  for(let i = 0; i < listProduct.listProduct.length; i++){
+      console.log(`id ${listProduct.listProduct[i].getId}`);
   }
-
- function menuKhackHang(){
-    let menuKhackHang = `
-    1. Them khack hang
-    2. Sua ten khack hang
-    3. Xoa ten khack hang
-    4. Hien thi ten khack hang`
-    console.log(menuKhackHang)
- } 
-
-
-function addSanPham() {
-  let idSanPham = +input.question("nhap ID san pham :");
-  let tenSanPham = input.question("nhap ten san pham :");
-  let soLuongSanPHam = +input.question("nhap so luong san pham :");
-  let sanPHam = {
-    idSanPham: idSanPham,
-    tenSanPham: tenSanPham,
-    soLuongSanPHam: soLuongSanPHam,
-  };
-  listSanPham.addSanPham(sanPHam);
 }
 
-function addKhackHang() {
-  let idKhackHang = +input.question("nhap ID khack hang :");
-  let tenKHackHang = input.question("nhap ho va ten khack hang");
-  let khackHang = {
-    idKhackHang: idKhackHang,
-    tenKHackHang: tenKHackHang,
-  };
-  listKhachHang.addKhackHang(khackHang);
-}
-function suaSanPHam() {
-  let id = +input.question("nhap ID san pham can sua ");
-  listSanPham.editSanPham(id);
-}
-function suaKhackHang() {
-  let id = +input.question("nhap ID khack hang can sua");
-  listKhachHang.editKhackHang(id);
-}
-function xoaSanPham(){
-    let id = +input.question('nhap ID san pham can xoa ')
-    listSanPham.removeSanPham(id)
+
+function showProduct() {
+  console.log(listProduct.findAll());
 }
 
-function xoaKhackHang(){
-    let id = +input.question('nhap ID khack hang can xoa')
-    listKhachHang.removeKhackHang(id)
-}
 
-function showSanPham(){
-    listSanPham.showSanPham()
+function showOrder() {
+  orderDetail.findAll();
 }
-
-function showKhackHang(){
-    listKhachHang.showKhackHang()
-}
-
 function main() {
-  menu();
-  let choice = +input.question("nhap lua chon cua ban");
-  switch (choice) {
-    case 1:
-      menuSanPham();
-      let choice1 = +input.question("nhap lua chon cua ban");
-      switch (choice1) {
-        case 1:
-          addSanPham();
-          break;
-        case 2:
-          suaSanPHam();
-          break;
-        case 3:
-          xoaSanPham();
-          break;
-        case 4 :
-            showSanPham()
-            break  
-      }
-      break;
-
-    case 2 : 
-    menuKhackHang()
-      let choice2 = +input.question('nhap ID khack hang')
-         switch(choice2) {
-                case 1  :
-                    addKhackHang()
-                    break
-                case 2 :
-                    suaKhackHang()
-                    break
-                case 3 : 
-                    xoaKhackHang()
-                case 4 :
-                    showKhackHang()
-         }
-
-    break  
-  }
-
+  mainMenu();
 }
 main();
