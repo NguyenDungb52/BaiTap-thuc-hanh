@@ -1,0 +1,24 @@
+{
+  "product": [
+    {
+      "name": "56437",
+      "price": "3465346",
+      "quantity": "314",
+      "id": 1
+    },
+    {
+      "name": "56437",
+      "price": "3465346",
+      "quantity": "314",
+      "id": 2
+    },
+    {
+      "name": "ffddsfg",
+      "price": "21314",
+      "quantity": "6464",
+      "id": 3
+    }
+  ],
+  "category": [],
+  "users": []
+}
